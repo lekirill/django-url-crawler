@@ -5,7 +5,7 @@ Enter URL, hit "Go", get all URLs in the given webpage
 
 To run app:
 ```
-docker-compose -d --build
+docker-compose up -d --build
 ```
 
 Service address:
