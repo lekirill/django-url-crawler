@@ -6,8 +6,21 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: "crawler-app"
+    depends_on:
+      - crawler-redis-cache
     ports:
       - "8000:8000"
+    environment:
+      REDIS_HOST: crawler-redis-cache
+      REDIS_PORT: 6379
+
     command: python3 crawler/manage.py runserver 0.0.0.0:8000
     restart: always
+
+  crawler-redis-cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 100
 

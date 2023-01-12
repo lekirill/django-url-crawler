@@ -1,32 +1,24 @@
-import requests
-
 from django.shortcuts import render
+from django.core.cache import cache
 from requests import status_codes
 
-from crawler.services import crawl_url, validate_url_string
+from crawler.services import validate_url_string, make_get_http_request
 
 
 def crawl_urls(request):
-    urls = None
+    template_params = {}
+    response_status_code = status_codes.codes.ok
+
     if request.method == 'POST':
         url = request.POST['url']
-        errors = validate_url_string(url)
-        if errors:
-            return render(
-                request, 'go_form.html', {'error': ', '.join(err for err in errors)},
-                status=status_codes.codes.bad_request
-            )
-
-        response = requests.get(url)
-
-        if response.status_code == status_codes.codes.ok:
-            urls = crawl_url(response.text)
-            return render(request, 'go_form.html', {'urls': urls})
+        if cache.get(url):
+            template_params['urls'] = cache.get(url)
         else:
-            return render(request, 'go_form.html',
-                          {'error': f'Error response from passed URL. '
-                                    f'Status {response.status_code}. Response: {response.json()}'},
-                          status=response.status_code)
+            errors = validate_url_string(url)
+            if errors:
+                template_params['error'] = ', '.join(err for err in errors)
+                response_status_code = status_codes.codes.bad_request
+            else:
+                template_params['urls'], response_status_code, template_params['error'] = make_get_http_request(url)
 
-    else:
-        return render(request, 'go_form.html', {'urls': urls})
+    return render(request, 'go_form.html', template_params, status=response_status_code)

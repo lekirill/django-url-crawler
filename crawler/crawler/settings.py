@@ -44,7 +44,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -77,6 +77,22 @@ WSGI_APPLICATION = 'crawler.wsgi.application'
 
 DATABASES = {
 
+}
+
+# Cache
+REDIS_HOST = os.environ.get("REDIS_HOST") or '0.0.0.0'
+REDIS_PORT = os.environ.get("REDIS_PORT") or '6379'
+
+CACHE_TTL_SEC = 60 * 5  # minutes
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
 }
 
 # Password validation

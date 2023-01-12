@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>URL Crawler</title>
+    <title>Simple URL Crawler</title>
 </head>
 <body>
 <h4>Enter URL:</h4>
@@ -12,13 +12,13 @@
     <button type="submit">Go</button>
 </form>
 {% if error %}
-    <h4 style="color: red">Error: {{ error }}</h4>
+<h4 style="color: red">Error: {{ error }}</h4>
 {% endif %}
 {% if urls %}
 <h4> URLs Found: </h4>
-    {% for url in urls %}
-        <p>{{ url }}</p>
-    {% endfor %}
+{% for url in urls %}
+<p> {{ url }} </p>
+{% endfor %}
 {% endif %}
 </body>
 </html>

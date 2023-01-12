@@ -1,13 +1,16 @@
 ## Simple Django URL crawler
-##### Python Django
+##### Python Django + Redis
 
 Enter URL, hit "Go", get all URLs in the given webpage
 
-To run app container:
+To run app:
 ```
 docker-compose -d --build
 ```
-Address:
+
+Service address:
 ```
 http://localhost:8080
 ```
+
+Redis operates on port 6379
